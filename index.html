@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morena La Papelera</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            max-width: 800px; 
+            margin: auto; 
+            display: none; 
+            background-color: #313030f3; /* Rojo clarito */
+            color: yellow; /* Letras en amarillo */
+        }
+        h1 {
+            text-align: center;
+            color: #d41717; /* Rojo oscuro */
+        }
+        input, select { width: 100%; padding: 8px; margin-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px; border: 1px solid #ccc; text-align: left; }
+        th { background-color: #ee3030c5; color: white; cursor: pointer; }
+        .status-circle { width: 20px; height: 20px; border-radius: 50%; display: inline-block; cursor: pointer; }
+        .red { background-color: red; }
+        .yellow { background-color: yellow; }
+        .green { background-color: green; }
+        textarea { width: 100%; }
+        .status-indicator {
+            margin-bottom: 10px;
+        }
+        .status-indicator div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        .status-indicator span {
+            margin-left: 10px;
+        }
+    </style>
+    <script>
+        function checkPassword() {
+            let password = prompt("Ingrese la clave para acceder:");
+            if (password === "1234") {
+                document.body.style.display = "block";
+            } else {
+                alert("Clave incorrecta. Inténtelo de nuevo.");
+                checkPassword();
+            }
+        }
+        function filterProducts() {
+            let search = document.getElementById("search").value.toLowerCase();
+            let filterBy = document.getElementById("filterBy").value;
+            let rows = document.querySelectorAll("tbody tr");
+            rows.forEach(row => {
+                let textToSearch = row.querySelector(`td:nth-child(${filterBy})`).textContent.toLowerCase();
+                row.style.display = textToSearch.includes(search) ? "" : "none";
+            });
+        }
+        function changeStatus(circle) {
+            if (circle.classList.contains("red")) {
+                circle.classList.remove("red");
+                circle.classList.add("yellow");
+            } else if (circle.classList.contains("yellow")) {
+                circle.classList.remove("yellow");
+                circle.classList.add("green");
+            } else {
+                circle.classList.remove("green");
+                circle.classList.add("red");
+            }
+        }
+        function filterByStatus(color) {
+            let rows = document.querySelectorAll("tbody tr");
+            let activeFilter = document.querySelector(`.status-indicator .${color}`).classList.toggle("active");
+            rows.forEach(row => {
+                let statusCircle = row.querySelector(".status-circle");
+                if (!activeFilter || statusCircle.classList.contains(color)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+        window.onload = checkPassword;
+    </script>
+</head>
+<body>
+    <h1>Morena La Papelera</h1>
+    <div class="status-indicator">
+        <div onclick="filterByStatus('red')"><div class="status-circle red"></div><span>Reponer</span></div>
+        <div onclick="filterByStatus('yellow')"><div class="status-circle yellow"></div><span>Se está agotando</span></div>
+        <div onclick="filterByStatus('green')"><div class="status-circle green"></div><span>Hay mercadería</span></div>
+    </div>
+    <select id="filterBy">
+        <option value="2">Producto</option>
+        <option value="3">Categoría</option>
+        <option value="4">Descripción</option>
+    </select>
+    <input type="text" id="search" placeholder="Buscar..." onkeyup="filterProducts()">
+    <table>
+        <thead>
+            <tr>
+                <th>ESTADO</th>
+                <th>PRODUCTO</th>
+                <th>CATEGORÍA</th>
+                <th>DESCRIPCIÓN</th>
+                <th>PRECIO</th>
+                <th>NOTAS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><div class="status-circle red" onclick="changeStatus(this)"></div></td>
+                <td>DR 22cm x1</td>
+                <td>Bandeja</td>
+                <td>Bandeja Dorada</td>
+                <td>$450,00</td>
+                <td><textarea></textarea></td>
+            </tr>
+            <tr>
+                <td><div class="status-circle red" onclick="changeStatus(this)"></div></td>
+                <td>DR 22cm x10</td>
+                <td>Bandeja</td>
+                <td>Bandeja Dorada</td>
+                <td>$3.350,00</td>
+                <td><textarea></textarea></td>
+            </tr>
+            <tr>
+                <td><div class="status-circle red" onclick="changeStatus(this)"></div></td>
+                <td>DR 22cm x50</td>
+                <td>Bandeja</td>
+                <td>Bandeja Dorada</td>
+                <td>$15.200,00</td>
+                <td><textarea></textarea></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
